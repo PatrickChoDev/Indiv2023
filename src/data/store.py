@@ -14,6 +14,9 @@ class BaseVectorStore(ABC):
 
   def get_store(self):
     return self.__store
+  
+  def clean(self,ids):
+    return self.__store.delete(ids)
 
 
 class PostgresVectorStore(BaseVectorStore):
