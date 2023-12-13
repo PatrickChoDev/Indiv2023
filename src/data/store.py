@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-from langchain.vectorstores import VectorStore
+from langchain.vectorstores import VectorStore,Chroma
 from langchain.vectorstores.pgvector import PGVector
-
 
 
 class BaseVectorStore(ABC):
@@ -28,3 +27,13 @@ class PostgresVectorStore(BaseVectorStore):
 
   def init_connection(self):
     return PGVector(collection_name=self.__collection_name,connection_string=self.__connection,embedding_function=self.__emb_fn)
+  
+class ChromaVectorStore(BaseVectorStore):
+  def __init__(self,collection_name,embedding_fn,data_folder="./chroma") -> None:
+    self.__data = data_folder
+    self.__collection = collection_name
+    self.__emb_fn = embedding_fn
+    super().__init__()
+
+  def init_connection(self):
+    return Chroma(collection_name=self.__collection, embedding_function=self.__emb_fn, persist_directory=self.__data)
